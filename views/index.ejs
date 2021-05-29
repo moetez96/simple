@@ -1,11 +1,19 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+    <link rel="icon" type="image/svg+xml" href="https://example.com/image.svg">
+</head>
+<body>
+<h1> Hello socket !</h1>
+
+<script src="/js/jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    //Demander handshake
+    var socket = io.connect('http://localhost:3000');
+    socket.on('message', function (data) {
+        console.log(data);
+        $('body').append('<p>' + data + '</p>')
+    })
+</script>
+</body>
 </html>
