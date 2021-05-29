@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+<ul id="messages"></ul>
+<form id="form">
+    <input type="text" id="input"/>
+    <button type="submit">Send</button>
+</form>
+
+<div class="chat-message">
+    <div class="message">
+        <p class="text"></p>
+        <p id="typing"></p>
+    </div>
+</div>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io()
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+        }
+    });
+
+    socket.on('chat message', function (msg) {
+        var date = new Date();
+        var heure = date.getHours();
+        var element = document.createElement('li');
+        element.textContent = msg+ ' ' +heure + 'h';
+        messages.appendChild(element);
+    });
+
+    $(document).ready(function (){
+        $('#input').keypress((e)=>{
+            if (e.which != 13){
+                typing =true;
+                socket.emit('typing', {user: 'somebody', typing:true});
+            }else{
+                socket.emit('typing', {user: 'somebody', typing:true});
+            }
+        });
+    });
+
+    socket.on('display', (data)=>{
+        if (data.typing){
+            $('#typing').text(`${data.user} is typing ...`);
+        }else{
+            $('#typing').text("")
+        }
+    })
+</script>
+</body>
+</html>

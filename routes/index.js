@@ -6,4 +6,9 @@ router.get('/', function(req, res, next) {
   res.render('indexSocket');
 });
 
+router.get('/chat', function(req, res, next) {
+  res.render('notif');
+});
+
+
 module.exports = router;

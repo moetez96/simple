@@ -22,7 +22,7 @@ app.set('port', port);
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 
-// creation serveur WS
+//Creation serveur WS
 io.on('connection', (socket) => {
     console.log(`un client WS connecté !!! ${socket.id}`);
     //emit() pour envoyer un socket nommé message
@@ -34,10 +34,18 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('new-notification', data);
     });
 
-//Deconnection utilisation
+    //Deconnection utilisation
     socket.on('disconnect', () => {
         io.emit('message', 'Un utilisateur déconnecté!!');
     });
+
+    //Application de chat
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    });
+    socket.on('typing', (data) => {
+        socket.broadcast.emit('display', data);
+    })
 });
 
 /**
